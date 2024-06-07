@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<div  style="margin-left: 50%;">
+  
+    <h2>NoteBook</h2>
+    <form id="myForm" onchange=""></form>  
+    <label style="padding-left: 0%;" for="input">Search Note :- </label>
+   <input type="text" id="input">
+   <p>Total Notes :- </p><p id="p1">0</p>
+   <p>Showing :- </p><p id="p2">0</p>
+</div>
+
+<div>
+<form onsubmit="handleFormSubmit()">
+<label for="inputNoteTitle"> Note Title :- </label>
+<input type="text" id="inputNoteTitle"/>
+<br><br>
+<label for="inputNoteDesc"> Note Desc :- </label>
+<br>
+<input style="height: 300px; width: 200px;" type="text" id="inputNoteDesc"/>
+<button type="submit">Add To Book</button>
+</form>
+</div>
+<div id="div3">
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.2/axios.min.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>
