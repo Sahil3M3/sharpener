@@ -9,9 +9,9 @@
 <div  style="margin-left: 50%;">
   
     <h2>NoteBook</h2>
-    <form id="myForm" onchange=""></form>  
+    <form id="myForm" ></form>  
     <label style="padding-left: 0%;" for="input">Search Note :- </label>
-   <input type="text" id="input">
+   <input type="text"  oninput="handleSearch()" id="input">
    <p>Total Notes :- </p><p id="p1">0</p>
    <p>Showing :- </p><p id="p2">0</p>
 </div>
@@ -27,8 +27,10 @@
 <button type="submit">Add To Book</button>
 </form>
 </div>
-<div id="div3">
+<div id="div3" class="container" style="border-color: red;border-style: dashed;">
+<ul id="ui">
 
+</ul>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.2/axios.min.js"></script>
     <script src="index.js"></script>
