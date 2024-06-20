@@ -1,4 +1,4 @@
-const url="https://crudcrud.com/api/564b47be7e444183975e5585067eedef/Notes"
+const url="https://crudcrud.com/api/0a864b852f4b4eacb6dace2fcbf17ad1/Notes"
 
 function handleFormSubmit()
 {
@@ -32,6 +32,8 @@ showTotal()
     }).catch((err)=>console.log(err))
 
 }
+
+
 window.addEventListener("DOMContentLoaded",()=>{
 showAllNotes();
 
