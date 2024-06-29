@@ -1,11 +1,23 @@
-const express=require('express');
-const fs=require('fs')
-const router=express.Router();
+const express = require('express');
+const fs = require('fs');
+const router = express.Router();
 
-router.get('/',(req,res)=>{
 
-    let fileText= fs.readFileSync('messages.txt', 'utf8');
-    res.send(`<!DOCTYPE html>
+function getMessagesHtml() {
+    try {
+        const fileText = fs.readFileSync('messages.txt', 'utf8');
+        const msg = fileText.split("\n");
+        return msg.map(line => `<p>${line}</p><br>`).join('');
+    } catch (err) {
+        console.error("Error reading file", err);
+        return "<p>Error loading messages</p>";
+    }
+}
+
+router.get('/', (req, res) => {
+    const messagesHtml = getMessagesHtml();
+    return res.send(`
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -13,44 +25,38 @@ router.get('/',(req,res)=>{
     <title>Document</title>
 </head>
 <body>
-    <div id="div">${fileText}</div>
-
+    <div id="div">${messagesHtml}</div>
     <form action="/" method="POST">
         <input type="text" name="messages" id="messages" />
         <input type="hidden" name="localStorageData" id="localStorageData" />
         <br>
-    <button type="submit"> Send</button>
+        <button type="submit"> Send</button>
     </form>
- <script>
-   
-
-        // Retrieve data from local storage
-        const localStorageData = localStorage.getItem('userName');
-
-        // Set the value of the hidden input field to the data from local storage
-        document.getElementById('localStorageData').value = localStorageData;
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const localStorageData = localStorage.getItem('userName');
+            document.getElementById('localStorageData').value = localStorageData || '';
+        });
     </script>
-
 </body>
 </html>`);
-})
+});
 
-router.post('/',(req,res)=>{
+router.post('/', (req, res) => {
+    const userName = req.body.localStorageData;
+    const newMessage = `${userName}: ${req.body.messages}\n`;
+    console.log(newMessage);
 
-const userName=req.body.localStorageData;
-const stringfull =`${userName}: ${req.body.messages}\n`;
-console.log(stringfull);
+    fs.appendFile('messages.txt', newMessage, (err) => {
+        if (err) {
+            console.error("Error writing to file", err);
+            res.status(500).send('Server error');
+            return;
+        }
 
-fs.appendFile('messages.txt', stringfull, (err) => {
-    if (err) {
-        console.error("Error writing to file", err);
-        res.status(500).send('Server error');
-        return;
-    }})
-
-
-    let fileText= fs.readFileSync('messages.txt', 'utf8');
-    res.send(`<!DOCTYPE html>
+        const messagesHtml = getMessagesHtml();
+        res.send(`
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -58,17 +64,22 @@ fs.appendFile('messages.txt', stringfull, (err) => {
     <title>Document</title>
 </head>
 <body>
-    <div id="div">${fileText}</div>
-
-    <form action="/message" method="POST">
-        <input type="text" name="userName" id="userName" />
+    <div id="div">${messagesHtml}</div>
+    <form action="/" method="POST">
+        <input type="text" name="messages" id="messages" />
+        <input type="hidden" name="localStorageData" id="localStorageData" />
         <br>
-    <button type="submit"> sent</button>
+        <button type="submit"> Send</button>
     </form>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const localStorageData = localStorage.getItem('userName');
+            document.getElementById('localStorageData').value = localStorageData || '';
+        });
+    </script>
 </body>
-</html>`)
-})
+</html>`);
+    });
+});
 
-
-
-module.exports=router;
+module.exports = router;

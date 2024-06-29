@@ -84,7 +84,7 @@ function handleSearch(){
                     }
                     showTotal()
             }
-             
+              
     }).catch((err)=>console.log(err))
 
 
