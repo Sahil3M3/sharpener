@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add a Review</title>
+    <style>
+        .star {
+            font-size: 10vh;
+            cursor: pointer;
+        }
+        .one {
+            color: rgb(255, 0, 0);
+        }
+        .two {
+            color: rgb(255, 106, 0);
+        }
+        .three {
+            color: rgb(251, 255, 120);
+        }
+        .four {
+            color: rgb(255, 255, 0);
+        }
+        .five {
+            color: rgb(24, 159, 14);
+        }
+    </style>
+</head>
+<body style="background-color:rgb(125, 83, 83);">
+    <h1 style="text-decoration: rgb(191, 44, 44); color: red; margin-left: 40%;">Add a Review</h1>
+    <div style="margin-left: 5%;">
+        <form id="reviewForm">
+            <label style="color:red;">Company Name:</label>
+            <br><br>
+            <input type="text" id="name" style="height: 40px; width: 270px;">
+            <br><br>
+            <label style="color:red;">Pros:</label>
+            <br><br>
+            <input type="text" id="pros" style="height: 100px; width: 300px;">
+            <br><br>
+            <label style="color:red;">Cons:</label>
+            <br><br>
+            <input type="text" id="cons" style="height: 100px; width: 300px;">
+            <br><br>
+            <div>
+                <h1>Company Rating</h1>
+                <br>
+                <span onclick="gfg(1)" class="star">★</span>
+                <span onclick="gfg(2)" class="star">★</span>
+                <span onclick="gfg(3)" class="star">★</span>
+                <span onclick="gfg(4)" class="star">★</span>
+                <span onclick="gfg(5)" class="star">★</span>
+                <h3 id="output">Rating is: 0/5</h3>
+            </div>
+            <br>
+            <button type="submit" style="height: 40px; width: 100px;">Submit</button>
+        </form>
+    </div>
+    <br><br><br>
+    <div style=" margin-left: 20%;">
+
+    <form onsubmit="handleSearch(event)">
+        <input type="text" id="search" style="width: 230px; height: 40px;">
+        <button type="submit">Search</button>
+    </form>
+    <br>
+    <hr>
+    <div id="div">
+
+    </div>
+
+    </div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>
