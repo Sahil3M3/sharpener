@@ -4,12 +4,14 @@ function handleSignUp(e)
     const email=document.getElementById('email').value;
     const phone=document.getElementById('phone').value;
     const password=document.getElementById('password').value;
+    const name=document.getElementById('name').value;
 
     //console.log(email+phone+password);
     const user={
         email:email,
         phone:phone,
-        password:password
+        password:password,
+        name:name
     }
     
     axios.post('http://localhost:5000/signup',user)

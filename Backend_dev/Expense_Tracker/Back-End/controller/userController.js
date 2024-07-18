@@ -1,26 +1,31 @@
 const User=require('../models/user')
+const bcrypt=require('bcrypt');
 module.exports.postUser=(req,res,next)=>{
 
-    const{email,phone,password}=req.body;
+    const{email,phone,password,name}=req.body;
+const salt=5;
+    bcrypt.hash(password,salt,(err,hash)=>{
+        const user={
+            email:email,
+            phone:phone,
+            password:hash,
+            name:name
+               }
+               User.create(user)
+               .then(r=>{
+                  // console.log(r);
+                  const msg="User is Added";
+                  return res.status(201).json({msg});
+               }
+               )
+               .catch(e=>
+               {
+                   
+                  return res.status(409).json({e})
+               }
+               )
+    })
 
-    const user={
-        email:email,
-        phone:phone,
-        password:password
-    }
-User.create(user)
-.then(r=>{
-   // console.log(r);
-   const msg="User is Added";
-   return res.status(201).json({msg});
-}
-)
-.catch(e=>
-{
-    
-   return res.status(409).json({e})
-}
-)
 
 }
 module.exports.getUser=(req,res,next)=>{
@@ -40,19 +45,29 @@ module.exports.loginUser=(req,res,next)=>{
     .then(u=>{
         if(!u)
         {
-            return res.status(200).json({msg:"User Not Found"});
+            return res.status(404).json({msg:"User Not found"});
         }
         else
-        {
-                  if(u.password===password)
-                  {
-                    const msg="Login sucessfull";
-                    return res.status(200).json({msg:msg});
-                  }
-                  else{
-                    return res.status(200).json({msg:"Incorrect Password"});
-                  }
-        }
+         {
+            bcrypt.compare(password,u.password,(err,response)=>{
+              
+if(err)
+{
+    res.status(500).json({msg:"Server went Down "})
+}
+
+                if(response===true)
+                    {
+                                    const msg="Login sucessfull";
+                                    return res.status(200).json({msg:msg});
+                     }
+                     else{
+                        return res.status(401).json({msg:"User not authorized"});
+                     }
+
+            });
+
+               }
     })
     .catch(e=>{
         res.status(409).json({e})
