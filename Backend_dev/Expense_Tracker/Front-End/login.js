@@ -1,4 +1,3 @@
-const { error } = require("console");
 
 function handleLogin(event)
 {
@@ -11,13 +10,14 @@ function handleLogin(event)
         email:email,
         password:password,
     }
-    axios.post('http://localhost:5000/login',user)
+    axios.post('http://localhost:5000/user/login',user)
     .then(r=>{
-        console.log(r.data.msg);
+        console.log(r.data.token);
        
         const div=document.getElementById('mydiv');
         div.innerText=r.data.msg;
-        alert(r.data.msg);
+        localStorage.setItem("jwt",r.data.token);
+        window.location.href="http://127.0.0.1:5500/Front-End/expense.html";
     })
     .catch(error=>{
        

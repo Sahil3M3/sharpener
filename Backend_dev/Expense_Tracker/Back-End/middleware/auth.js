@@ -13,7 +13,7 @@ const authenticate=(req,res,next)=>{
     {
         const key="Your_Key";
         const id=jwt.verify(token,key);
-       console.log("in auth "+id.userId);
+       
         User.findByPk(id.userId)
         .then(r=>{
             if(!r)
@@ -24,7 +24,7 @@ const authenticate=(req,res,next)=>{
             return r;
         })
         .then(u=>{
-            console.log(u);
+          
             req.user=u;
             next();
         })

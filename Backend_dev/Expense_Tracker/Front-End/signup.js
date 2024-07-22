@@ -14,7 +14,7 @@ function handleSignUp(e)
         name:name
     }
     
-    axios.post('http://localhost:5000/signup',user)
+    axios.post('http://localhost:5000/user/signup',user)
     .then(r=>{
        // console.log(r.data);
         const p=document.getElementById('p');
@@ -25,5 +25,7 @@ function handleSignUp(e)
       //  console.log(e.data);
         p.innerText=e.data.msg;
     })
+    window.location.href="http://127.0.0.1:5500/Front-End/login.html";
+
 }
 

@@ -17,15 +17,15 @@ function handleSubmit(event)
 if(expenseId)
 {
   axios.put(`http://localhost:5000/expense/${expenseId}`,expense)
-
-
+  .then(r=>{
+    window.location.reload();
+  })
+  .catch(e=>console.log(e))
 }
 else
 {
-
-  console.log(expense);
-
-  axios.post('http://localhost:5000/expense',expense)
+  const token=localStorage.getItem("jwt")
+  axios.post('http://localhost:5000/expense',expense,{headers:{"Authorization":token}})
   .then(r=>{
     id=r.data.id;
     console.log(expenseAmount+"-"+Description+"-"+type+"-"+id);
@@ -54,17 +54,41 @@ function addExpense(expenseAmount,Description,type,id)
 
 
 window.addEventListener('DOMContentLoaded',()=>{
-  axios.get('http://localhost:5000/expense')
+
+  const token=localStorage.getItem("jwt")
+
+  axios.get("http://localhost:5000/premium/check",{headers:{"Authorization":token}})
   .then(r=>{
-    console.log(r.data);
+   
+    fetchData();
+
+  }).catch(e=>{
+    console.log(e.response);
+  })
+
+
+
+})
+
+function fetchData()
+{
+  const token=localStorage.getItem("jwt")
+  axios.get('http://localhost:5000/expense',{headers:{"Authorization":token}})
+  .then(r=>{
+
+      document.getElementById('addbtn').style.display = 'unset';
+      document.getElementById('purchase').style.display='unset';
+      document.getElementById('rzp-button').style.display = 'none';
 for( i=0;i<r.data.length;i++)
 {
   const {expenseAmount,Description,type,id}=r.data[i];
   addExpense(expenseAmount,Description,type,id)
-}
+}   
   })
   .catch(e=>console.log(e))
-})
+
+}
+
 
 function handleDelete(id)
 {
@@ -74,6 +98,7 @@ axios.delete(`http://localhost:5000/expense/${id}`)
   console.log(r);
 })
 .catch(e=>console.log(e))
+window.location.reload();
 }
 
 function handleEdit(expenseAmount,Description,type,id)
@@ -93,5 +118,81 @@ function clearForm()
 {
   document.getElementById('myForm').reset();
   document.getElementById('expenseId').value = '';
+
+}
+
+
+function handlePurchase()
+{
+
+  const token=localStorage.getItem('jwt');
+  if (!token) {
+    alert('You need to be logged in to make a purchase');
+    return;
+}
+axios.get('http://localhost:5000/premium/premiummembership',{headers:{Authorization:token}})
+.then(r=>{
+
+  const orderid = r.data.order.id;
+        const key_id = r.data.key_id;
+
+        var options = {
+          "key": key_id,
+          "order_id": orderid,
+          "handler": function(response) {
+            const payment = {
+              msg:"sucessfull",
+              paymentId: response.razorpay_payment_id,
+              orderId: response.razorpay_order_id
+            };
+      
+            axios.post('http://localhost:5000/premium/premiummembership', payment, { headers: { Authorization: token } })
+            .then(res => {
+              alert("Payment successful!");
+              window.location.reload();
+            })
+            .catch(err => {
+              console.error(err);
+
+              payment.msg='failed'
+              axios.post('http://localhost:5000/premium/premiummembership', payment, { headers: { Authorization: token } })
+              .then(res => {
+                alert("Payment was cancelled. Please try again.");
+              })
+              .catch(err => {
+                console.error(err);
+                alert("Payment verification failed, please contact support.");
+              });
+
+             
+            });
+          },
+          "modal": {
+            "ondismiss": function(response) {
+              const payment = {
+                msg:"cancel",
+             
+                orderId: orderid
+              };
+              axios.post('http://localhost:5000/premium/premiummembership', payment, { headers: { Authorization: token } })
+              .then(res => {
+                alert("Payment was cancelled. Please try again.");
+              })
+              .catch(err => {
+                console.error(err);
+                alert("Payment verification failed, please contact support.");
+              });
+             
+              // Additional logic for payment cancellation if needed
+            }
+          }
+        };
+
+var rzp1=new Razorpay(options);
+rzp1.open();
+
+})
+.catch(e=>console.log(e));
+
 
 }

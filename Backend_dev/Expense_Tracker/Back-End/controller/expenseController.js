@@ -1,22 +1,32 @@
 const Expense=require('../models/expense')
 
 module.exports.getExpense=(req,res,next)=>{
-
-    Expense.findAll()
+    console.log(req.user);
+    if(req.user.ispremium===true)
+{
+    Expense.findAll({where:{userId:req.user.id}})
     .then(r=>res.send(JSON.stringify(r)))
     .catch(e=>{console.log(e)})
+}
+else
+{
+    res.status(200).json({check:"false"})
+}
 }
 
 module.exports.addExpense=(req,res,next)=>{
     const {expenseAmount,Description,type}=req.body;
 
-    const expense={
-        expenseAmount:expenseAmount,
-        Description:Description,
-        type:type,
-    }
-console.log(expense);
+   
 
+const userId= req.user.id
+
+const expense={
+    expenseAmount:expenseAmount,
+    Description:Description,
+    type:type,
+    userId:userId
+}
 Expense.create(expense)
 .then(r=>{
     const id=r.id;
@@ -47,6 +57,7 @@ module.exports.putExpense=(req,res,next)=>
      e.Description=Description;
      e.type=type;
      e.save();
+     return res.status(203).json({msg:"success"});
     })
     .catch(e=>console.log(e))
 }

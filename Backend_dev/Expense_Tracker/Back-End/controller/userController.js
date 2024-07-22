@@ -1,5 +1,8 @@
 const User=require('../models/user')
 const bcrypt=require('bcrypt');
+const jwt=require('jsonwebtoken');
+
+
 module.exports.postUser=(req,res,next)=>{
 
     const{email,phone,password,name}=req.body;
@@ -59,7 +62,7 @@ if(err)
                 if(response===true)
                     {
                                     const msg="Login sucessfull";
-                                    return res.status(200).json({msg:msg});
+                                    return res.status(200).json({msg:msg,token:generateToken(u.id)});
                      }
                      else{
                         return res.status(401).json({msg:"User not authorized"});
@@ -72,4 +75,11 @@ if(err)
     .catch(e=>{
         res.status(409).json({e})
     })
+}
+
+function generateToken(id)
+{
+    const key="Your_Key";
+
+    return jwt.sign({userId:id},key);
 }

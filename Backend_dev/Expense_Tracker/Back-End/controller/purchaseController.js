@@ -32,6 +32,7 @@ module.exports.premiummembership = (req, res, next) => {
             });
     });
 };
+
 module.exports.updateMembership=(req,res,next)=>{
     const userId = req.user.id;
 
@@ -61,12 +62,25 @@ const msg=req.body.msg;
     .then(o=>{
         o.status="COMPLETED";
         o.paymentId=paymentId;
-        o.save().then().catch(e=>console.log(e));
+        o.save().then(ree=>{
+res.status(203).json({msg:"updated"})
+        }).catch(e=>console.log(e));
     })
 
 })
 .catch(e=>console.log(e))
 }
+}
 
-   
+module.exports.checkPremium=(req,res,next)=>{
+
+    const { id, ispremium } = req.user;
+
+    if (ispremium) {
+      return res.status(200).json({ check: true });
+    } else {
+      return res.status(403).json({ check: false });
+    }
+  
+
 }
