@@ -1,17 +1,14 @@
 const Expense=require('../models/expense')
+const User=require('../models/user')
+const Sequelize=require('sequelize')
+const sequelize = require('../util/database')
 
 module.exports.getExpense=(req,res,next)=>{
-    console.log(req.user);
-    if(req.user.ispremium===true)
-{
+
     Expense.findAll({where:{userId:req.user.id}})
     .then(r=>res.send(JSON.stringify(r)))
     .catch(e=>{console.log(e)})
-}
-else
-{
-    res.status(200).json({check:"false"})
-}
+
 }
 
 module.exports.addExpense=(req,res,next)=>{
@@ -60,4 +57,27 @@ module.exports.putExpense=(req,res,next)=>
      return res.status(203).json({msg:"success"});
     })
     .catch(e=>console.log(e))
+}
+module.exports.showLeaderboard=async (req,res,next)=>{
+    console.log("in board");
+
+    try {
+        const topUser = await User.findAll({
+            attributes: [
+              'id',"name",
+              [Sequelize.fn('sum', Sequelize.col('expenseAmount')), 'total_cost']
+        ],include:[{
+            model:Expense,
+            attributes:[]
+        }],group:["users.id"],
+        order:[["total_cost",'DESC'] ]
+          });
+               res.status(200).json(topUser);
+
+      } catch (error) {
+        console.error('Error fetching top users:', error);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+
+
 }

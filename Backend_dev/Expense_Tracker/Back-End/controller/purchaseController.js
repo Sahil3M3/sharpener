@@ -33,44 +33,59 @@ module.exports.premiummembership = (req, res, next) => {
     });
 };
 
-module.exports.updateMembership=(req,res,next)=>{
+module.exports.updateMembership = (req, res, next) => {
     const userId = req.user.id;
-
-const orderId=req.body.orderId;
-const msg=req.body.msg;
-     if(msg==='cancel' || msg==='failed')
-     {
-
-        
-            order.findOne({where:{orderId:orderId}})
-            .then(o=>{
-                o.status="FAILED";
-              
-                o.save().then().catch(e=>console.log(e));
-            })
-            .catch(e=>console.log(e))
-     }
-     else
-{
-    const paymentId=req.body.paymentId;
-    user.findByPk(userId)
-.then(u=> u)
-.then(u=>{
-    u.ispremium=true;
-    u.save().then().catch(e=>console.log(e))
-    order.findOne({where:{orderId:orderId}})
-    .then(o=>{
-        o.status="COMPLETED";
-        o.paymentId=paymentId;
-        o.save().then(ree=>{
-res.status(203).json({msg:"updated"})
-        }).catch(e=>console.log(e));
-    })
-
-})
-.catch(e=>console.log(e))
-}
-}
+    const orderId = req.body.orderId;
+    const msg = req.body.msg;
+  
+    if (msg === 'cancel' || msg === 'failed') {
+      Order.findOne({ where: { orderId: orderId } })
+        .then(order => {
+          if (!order) {
+            return res.status(404).json({ msg: 'Order not found' });
+          }
+          order.status = "FAILED";
+          return order.save();
+        })
+        .then(() => {
+          res.status(200).json({ msg: 'Order status updated to FAILED' });
+        })
+        .catch(error => {
+          console.error(error);
+          res.status(500).json({ msg: 'Internal server error' });
+        });
+    } else {
+      const paymentId = req.body.paymentId;
+  
+      user.findByPk(userId)
+        .then(user => {
+          if (!user) {
+            return res.status(404).json({ msg: 'User not found' });
+          }
+          user.ispremium = true;
+          return user.save();
+        })
+        .then(() => {
+          return order.findOne({ where: { orderId: orderId } });
+        })
+        .then(order => {
+          if (!order) {
+            return res.status(404).json({ msg: 'Order not found' });
+          }
+          order.status = "COMPLETED";
+          order.paymentId = paymentId;
+          return order.save();
+        })
+        .then(() => {
+          res.status(200).json({ msg: 'Membership updated to premium' });
+        })
+        .catch(error => {
+          console.error(error);
+          res.status(500).json({ msg: 'Internal server error' });
+        });
+    }
+  };
+  
 
 module.exports.checkPremium=(req,res,next)=>{
 

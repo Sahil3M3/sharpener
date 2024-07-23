@@ -1,7 +1,7 @@
 const Sequelize=require('sequelize');
 const sequelize=require('../util/database')
 
-const Expense=sequelize.define('expense',{
+const Expense=sequelize.define('expenses',{
 
     id:{
         type:Sequelize.INTEGER,
@@ -11,7 +11,7 @@ const Expense=sequelize.define('expense',{
     },
     expenseAmount:{
         type:Sequelize.BIGINT,
-        allowNull:false
+        allowNull:true
     },
     Description:{
         type:Sequelize.STRING,

@@ -79,6 +79,7 @@ function fetchData()
       document.getElementById('addbtn').style.display = 'unset';
       document.getElementById('purchase').style.display='unset';
       document.getElementById('rzp-button').style.display = 'none';
+      document.getElementById('leaderboard').style.display = 'unset';
 for( i=0;i<r.data.length;i++)
 {
   const {expenseAmount,Description,type,id}=r.data[i];
@@ -194,5 +195,43 @@ rzp1.open();
 })
 .catch(e=>console.log(e));
 
+
+}
+
+function showLeaderboard(event)
+{
+  event.preventDefault();
+ 
+  const token=localStorage.getItem("jwt")
+ 
+  axios.get('http://localhost:5000/expense/board',{headers:{"Authorization":token}})
+  .then(r=>{
+
+      document.getElementById('leaderboard').style.display = 'unset';
+
+for( i=0;i<r.data.length;i++)
+{
+  const {total_cost,name}=r.data[i];
+  addBoard(name,total_cost)
+} 
+
+
+  })
+  .catch(e=>console.log(e))
+
+}
+
+
+function addBoard(name,expenseAmount)
+{
+  const newTr = document.createElement('tr');
+ 
+    newTr.innerHTML = `
+    <td>${name}</td>
+        <td>${expenseAmount}</td>
+ 
+    `;
+    const ui = document.getElementById('ui1');
+    ui.appendChild(newTr);
 
 }

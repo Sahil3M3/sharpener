@@ -17,10 +17,10 @@
   <input type="hidden" id="expenseId" name="expenseId">
     <div class="row g-3">
         <div class="col">
-          <input type="number"  required class="form-control" placeholder="Enter Expense Amount" id="expenseAmount">
+          <input type="number"   class="form-control" placeholder="Enter Expense Amount" id="expenseAmount">
         </div>
         <div class="col">
-          <input type="text" required class="form-control" placeholder="Description" id="Description" >
+          <input type="text"  class="form-control" placeholder="Description" id="Description" >
         </div>
 
           
@@ -28,7 +28,7 @@
       </div>
 
       <div style="margin: 30px;">
-        <select class="form-select form-select-lg mb-3" required id="type">
+        <select class="form-select form-select-lg mb-3"  id="type">
             <option selected>Select Type</option>
             <option value=Food>Food</option>
             <option value=Movie>Movie</option>
@@ -38,6 +38,7 @@
           <input class="btn btn-primary" style="display: none;" id="addbtn" type="submit" value="Add Expense"/>
           <button id="rzp-button"  class="btn btn-primary" onclick="handlePurchase()" value="Buy Premium">Buy Premium</button>
       <button  id="purchase" style="display: none;"   class="btn btn-primary">You are Premium User </button>
+      <button  id="leaderboard" style="display: none;"  onclick="showLeaderboard(event)" class="btn btn-primary">Show Leaderboard</button>
         </div>
   
 </form>
@@ -45,6 +46,7 @@
 
 
 <div style="margin: 30px;">
+  <h2>Expenses</h2>
     <table class="table">
         <thead >
           <tr>
@@ -62,6 +64,24 @@
         </tbody>
       </table>
 </div>
+
+<div style="margin: 30px; display: inline;">
+  <h2>Leaderboard</h2>
+  <table class="table">
+      <thead >
+        <tr>
+      
+          <th scope="col">Name</th>
+          <th scope="col">Total Expense</th>
+        </tr>
+      </thead>
+      <tbody id="ui1">
+     
+     
+      </tbody>
+    </table>
+</div>
+
 </div>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
