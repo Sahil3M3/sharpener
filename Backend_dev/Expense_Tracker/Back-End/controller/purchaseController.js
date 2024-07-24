@@ -39,7 +39,7 @@ module.exports.updateMembership = (req, res, next) => {
     const msg = req.body.msg;
   
     if (msg === 'cancel' || msg === 'failed') {
-      Order.findOne({ where: { orderId: orderId } })
+      order.findOne({ where: { orderId: orderId } })
         .then(order => {
           if (!order) {
             return res.status(404).json({ msg: 'Order not found' });

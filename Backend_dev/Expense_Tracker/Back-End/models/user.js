@@ -13,6 +13,11 @@ const User = sequelize.define('users', {
       allowNull: false,
       unique: true
     },
+    total_cost:{
+      type:Sequelize.BIGINT,
+      allowNull:true
+    }
+    ,
     name:{
       type: Sequelize.STRING,
       allowNull: false

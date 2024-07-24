@@ -16,7 +16,8 @@ function handleSubmit(event)
 
 if(expenseId)
 {
-  axios.put(`http://localhost:5000/expense/${expenseId}`,expense)
+  const token=localStorage.getItem("jwt")
+  axios.put(`http://localhost:5000/expense/${expenseId}`,expense,{headers:{"Authorization":token}})
   .then(r=>{
     window.location.reload();
   })
@@ -34,6 +35,7 @@ addExpense(expenseAmount,Description,type,id)
   .catch(e=>console.log(e))
 }
 clearForm();
+window.location.reload();
 }
 
 function addExpense(expenseAmount,Description,type,id)
@@ -94,7 +96,8 @@ for( i=0;i<r.data.length;i++)
 function handleDelete(id)
 {
   console.log(id);
-axios.delete(`http://localhost:5000/expense/${id}`)
+  const token=localStorage.getItem("jwt")
+axios.delete(`http://localhost:5000/expense/${id}`,{headers:{"Authorization":token}})
 .then(r=>{
   console.log(r);
 })
@@ -114,6 +117,8 @@ function handleEdit(expenseAmount,Description,type,id)
   fDescription.value = Description;
   ftype.value = type;
   fexpenseId.value = id;
+ 
+
 }
 function clearForm()
 {
@@ -203,11 +208,14 @@ function showLeaderboard(event)
   event.preventDefault();
  
   const token=localStorage.getItem("jwt")
+  console.log("hiii in learder");
  
   axios.get('http://localhost:5000/expense/board',{headers:{"Authorization":token}})
   .then(r=>{
 
-      document.getElementById('leaderboard').style.display = 'unset';
+document.getElementById('leader').style.display='unset';
+      document.getElementById('ui1').innerHTML='';
+ 
 
 for( i=0;i<r.data.length;i++)
 {
@@ -218,7 +226,7 @@ for( i=0;i<r.data.length;i++)
 
   })
   .catch(e=>console.log(e))
-
+  //window.location.reload();
 }
 
 

@@ -12,6 +12,7 @@ const salt=5;
             email:email,
             phone:phone,
             password:hash,
+            total_cost:0,
             name:name
                }
                User.create(user)
