@@ -48,7 +48,7 @@ downloadhistory.belongsTo(User,{foreignKey:"userId"});
 
 sequelize.sync()    
 .then(r=>{
-    app.listen(5000,()=>{
+    app.listen(process.env.PORT,()=>{
         console.log("Database is on  And Server is listing on 5000");
     })
 
