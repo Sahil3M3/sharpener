@@ -1,2 +1,0 @@
-::1 - - [30/Jul/2024:20:17:31 +0000] "GET / HTTP/1.1" 404 23 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36"
-::1 - - [30/Jul/2024:20:17:31 +0000] "GET /favicon.ico HTTP/1.1" 404 23 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36"

@@ -23,7 +23,7 @@ module.exports.sendPasswordResetEmail=async(req)=>{
         const user = await User.findOne({ where: { email } });
     
         if (!user) {
-          return res.status(404).json({ message: 'User not found' });
+          return { status: 404, message: 'User not found' };
         }
   const forgotRequest={
       id:uuidv4(),
@@ -32,7 +32,7 @@ module.exports.sendPasswordResetEmail=async(req)=>{
   }
   
       const requestf=await FPR.create(forgotRequest,{transaction:t});
-      const resetLink=`http://127.0.0.1:5500/Front-End/newpassword.html?token=${requestf.id}`;
+      const resetLink=`http://localhost:5000/newpassword.html?token=${requestf.id}`;
         const response = await tranEmailApi.sendTransacEmail({
           sender,
           to: receivers,

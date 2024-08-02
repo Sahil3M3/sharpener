@@ -21,7 +21,10 @@ const passwordRouter=require('./routes/password')
 const asscessLogStream=fs.createWriteStream(path.join(__dirname,'access.log'),
 {flag:'a'} )
 app.use(helmet());
-
+app.use((req, res, next) => {
+    res.setHeader("Content-Security-Policy", "script-src 'self' https://cdn.jsdelivr.net;");
+    next();
+});
 app.use(morgan('combined',{stream:asscessLogStream}));
 app.use(cors());
 app.use(express.json());
@@ -29,9 +32,15 @@ app.use('/user',userRouter)
 app.use('/expense',expenseRouter);
 app.use('/premium',purchaseRouter);
 app.use('/password',passwordRouter);
-app.use('/',(req,res)=>{
-    res.status(404).send("<h1> Not Found</h1>")
-})
+app.use('/', (req, res) => {
+    console.log("url" + req.url);
+
+    // Remove query string from the URL
+    const url = req.url.split('?')[0];
+    console.log(path.join(__dirname, `public${url}`));
+
+    res.sendFile(path.join(__dirname, `public${url}`));
+});
 
 
 User.hasMany(Expense, { foreignKey: 'userId', onDelete: 'CASCADE' });
@@ -53,4 +62,6 @@ sequelize.sync()
     })
 
 })
-.catch(e=>{console.log(e)})
+.catch(e=>{
+    
+    console.log(e)})
